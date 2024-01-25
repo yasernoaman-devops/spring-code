@@ -43,6 +43,6 @@ jobs:
        - name: echo the database username
          run: echo "$DATABASE_USERNAME"
        - name: Set up Docker Buildx
-         run: docker build -t acrnoaman.azurecr.io/abha:${GITHUB_JOB} .
+         run: docker build -t acrnoaman.azurecr.io/abha:${GITHUB_JOB}-DEV .
        - name: Docker Push Image to registry 
          run:  docker push acrnoaman.azurecr.io/abha:${GITHUB_JOB}-DEV
