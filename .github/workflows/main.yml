@@ -32,7 +32,7 @@ jobs:
          with:
            name: war-file
            path: target/spring-boot-app-1.4.0.RELEASE.jar
-  docker image build:
+  docker-image-build:
     needs: package-upload
     runs-on: self-hosted
     steps: 
