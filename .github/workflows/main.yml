@@ -1,0 +1,44 @@
+name: development
+on: 
+  push:
+    branches:
+      - master
+  workflow_dispatch:  
+env:
+  DATABASE_USERNAME: ${{ secrets.USERNAME }}
+  
+jobs:
+  checkout-job:
+     runs-on: self-hosted
+     steps:
+       - name: checking out code
+         uses: actions/checkout@v4
+  app-build:
+     needs: checkout-job
+     runs-on: self-hosted
+     steps: 
+       - name: list the content of the directory
+         run: ls -lrt
+       - name: build of the application
+         run: mvn clean install
+  package-upload:
+     needs: app-build
+     runs-on: self-hosted
+     steps: 
+       - name: list the directory in target folder
+         run: ls -lrt target
+       - name: upload war file package
+         uses: actions/upload-artifact@v4
+         with:
+           name: war-file
+           path: target/spring-boot-app-1.4.0.RELEASE.jar
+  download-package:
+    needs: package-upload
+    runs-on: self-hosted
+    steps: 
+       - name: download war file package
+         uses: actions/download-artifact@v4  
+         with:
+           name: war-file         
+       - name: echo the database username
+         run: echo "$DATABASE_USERNAME"
