@@ -46,3 +46,9 @@ jobs:
          run: docker build -t acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV .
        - name: Docker Push Image to registry 
          run:  docker push acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV
+  docker-image-scan:
+    needs: package-upload
+    runs-on: self-hosted
+    steps: 
+       - name: scan docker image for vulnerabilities
+         run: trivy imaage acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV
