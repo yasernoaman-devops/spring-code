@@ -47,7 +47,7 @@ jobs:
        - name: Docker Push Image to registry 
          run:  docker push acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV
   docker-image-scan:
-    needs: package-upload
+    needs: docker-image-build
     runs-on: self-hosted
     steps: 
        - name: scan docker image for vulnerabilities
