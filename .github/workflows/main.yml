@@ -51,4 +51,4 @@ jobs:
     runs-on: self-hosted
     steps: 
        - name: scan docker image for vulnerabilities
-         run: trivy imaage acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV
+         run: trivy image acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV
