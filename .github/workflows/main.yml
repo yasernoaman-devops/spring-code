@@ -19,12 +19,12 @@ jobs:
      needs: checkout-job
      runs-on: self-hosted
      steps: 
-         env:
-             step-level: ${{ vars.step_level }} 
        - name: list the content of the directory
          run: echo "This is $global-level , $job-level and $step-level variables in a single shell command" 
        - name: build of the application
          run: mvn clean install
+         env:
+             step-level: ${{ vars.step_level }}          
   package-upload:
      needs: app-build
      runs-on: self-hosted
