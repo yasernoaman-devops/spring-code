@@ -12,13 +12,7 @@ jobs:
      runs-on: self-hosted
      steps:
        - name: checking out code
-         uses: actions/checkout@v4
-       - name: SonarQube Scan
-         uses: kitabisa/sonarqube-action@v1.2.0
-         with:
-           host: ${{ secrets.SONARQUBE_HOST }}
-           login: ${{ secrets.SONARQUBE_TOKEN }}
-           projectKey: POC-Code         
+         uses: actions/checkout@v4        
   app-build:
      env:
         job-level: ${{ vars.job_level }}
@@ -30,7 +24,13 @@ jobs:
        - name: build of the application
          run: mvn clean install
          env:
-             step-level: ${{ vars.step_level }}          
+             step-level: ${{ vars.step_level }}   
+       - name: SonarQube Scan
+         uses: kitabisa/sonarqube-action@v1.2.0
+         with:
+           host: ${{ secrets.SONARQUBE_HOST }}
+           login: ${{ secrets.SONARQUBE_TOKEN }}
+           projectKey: POC-Code              
   package-upload:
      needs: app-build
      runs-on: self-hosted
