@@ -13,6 +13,12 @@ jobs:
      steps:
        - name: checking out code
          uses: actions/checkout@v4
+       - name: SonarQube Scan
+         uses: kitabisa/sonarqube-action@v1.2.0
+         with:
+           host: ${{ secrets.SONARQUBE_HOST }}
+           login: ${{ secrets.SONARQUBE_TOKEN }}
+           projectKey: POC-Code         
   app-build:
      env:
         job-level: ${{ vars.job_level }}
