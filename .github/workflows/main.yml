@@ -16,6 +16,8 @@ jobs:
   infra-build:
      runs-on: self-hosted
      steps:
+       - name: list the directory in target folder
+         run: ls -lrt      
        - name: Navigate to the Terraform code Directory
          run: cd terrform-code
        - name: Initialize Terraform
