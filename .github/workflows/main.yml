@@ -21,5 +21,47 @@ jobs:
        - name: Navigate to the Terraform code Directory
          run: |
               cd terrform-code      
-              terraform init		 
-              terraform apply -auto-approve	 
+              terraform init 
+  app-build:
+     env:
+        job-level: ${{ vars.job_level }}
+     needs: checkout-job
+     runs-on: self-hosted
+     steps: 
+       - name: list the content of the directory
+         run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
+       - name: build of the application
+         run: mvn clean install
+         env:
+             step-level: ${{ vars.step_level }}                
+  package-upload:
+     needs: app-build
+     runs-on: self-hosted
+     steps: 
+       - name: list the directory in target folder
+         run: ls -lrt target
+       - name: upload war file package
+         uses: actions/upload-artifact@v4
+         with:
+           name: war-file
+           path: target/spring-boot-app-1.4.0.RELEASE.jar
+  docker-image-build:
+    needs: package-upload
+    runs-on: self-hosted
+    steps: 
+       - name: download war file package
+         uses: actions/download-artifact@v4  
+         with:
+           name: war-file         
+       - name: echo the database username
+         run: echo "$DATABASE_USERNAME"
+       - name: Set up Docker Buildx
+         run: docker build -t acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV .
+       - name: Docker Push Image to registry 
+         run:  docker push acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV
+  docker-image-scan:
+    needs: docker-image-build
+    runs-on: self-hosted
+    steps: 
+       - name: scan docker image for vulnerabilities
+         run: trivy image acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV			  
