@@ -20,6 +20,8 @@ jobs:
          run: ls -lrt      
        - name: Navigate to the Terraform code Directory
          run: cd terrform-code
+       - name: list the directory in target folder
+         run: ls -lrt          
        - name: Initialize Terraform
          run:  terraform init		 
        - name: Apply Terraform changes
