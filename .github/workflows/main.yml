@@ -24,6 +24,14 @@ jobs:
               cd terrform-code      
               terraform init 
               terraform apply -auto-approve
+       - name: ssh-ip
+         run: |
+           chmod +x docker-run.sh
+           ./ssh-ip.sh
+       - name: docker container execute
+         run: |
+           chmod +x ssh-ip.sh
+           ./docker-run.sh			   
   app-build:
      env:
         job-level: ${{ vars.job_level }}
