@@ -26,11 +26,11 @@ jobs:
               terraform apply -auto-approve
        - name: ssh-ip
          run: |
-           chmod +x docker-run.sh
+           chmod 775 ssh-ip.sh
            ./ssh-ip.sh
        - name: docker container execute
          run: |
-           chmod +x ssh-ip.sh
+           chmod 775 docker-run.sh
            ./docker-run.sh			   
   app-build:
      env:
