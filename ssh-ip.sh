@@ -1,4 +1,5 @@
 #!/bin/bash
+sleep 3m
 file_path="terrform-code/public_ips.txt"
 while IFS= read -r ip; do
     echo "Executing commands on $ip"
