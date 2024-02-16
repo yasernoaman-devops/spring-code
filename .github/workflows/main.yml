@@ -75,3 +75,7 @@ jobs:
     steps: 
        - name: scan docker image for vulnerabilities
          run: trivy image acrnoaman.azurecr.io/abha:${{ github.run_number }}-DEV			  
+       - name: application deployment 
+         run: |
+           chmod 775 application-run.sh
+           ./application-run.sh	
