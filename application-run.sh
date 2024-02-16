@@ -13,8 +13,8 @@ while IFS= read -r ip_address; do
         # Commands to be executed on the remote server
         echo "Executing commands on $HOSTNAME"
         sudo  az acr login --name ACRNOAMAN --username ACRNOAMAN --password BvZYFM64ATh/HjrSJm6mAMk0/qM9PVLvMhss2TeuSM+ACRDF7GJU
-        sudo  docker pull acrnoaman.azurecr.io/abha:"$GH_RUN_NUMBER"-DEV
-        sudo docker run -itd -p 80:8080 acrnoaman.azurecr.io/abha:"$GH_RUN_NUMBER"-DEV
+        sudo  docker pull acrnoaman.azurecr.io/abha:60-DEV
+        sudo docker run -itd -p 80:8080 acrnoaman.azurecr.io/abha:60-DEV
 
 
 EOF
