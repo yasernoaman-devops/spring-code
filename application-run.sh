@@ -1,30 +1,28 @@
 #!/bin/bash
 
-# Replace these values with your ACR credentials
-ACR_NAME="ACRNOAMAN"
-ACR_USERNAME="ACRNOAMAN"
-ACR_PASSWORD="BvZYFM64ATh/HjrSJm6mAMk0/qM9PVLvMhss2TeuSM+ACRDF7GJU"
+# File containing IP addresses
+ip_file="terrform-code/public_ips.txt"
+GH_RUN_NUMBER=$(echo "${GITHUB_RUN_NUMBER}" | tr -d -)
+# Read each line from the file
+while IFS= read -r ip_address; do
+    echo "Connecting to $ip_address..."
 
-# Replace this with the path to your test file containing IP addresses
-TEST_FILE="terrform-code/public_ips.txt"
-
-# Replace this with the desired image name
-IMAGE_NAME="abha"
-
-# Get GitHub run number as the image tag
-GITHUB_RUN_NUMBER=$1
-
-# Log in to ACR
+    # SSH into the remote server and execute commands
+    ssh azureuser@$ip_address <<'EOF'
+        # Commands to be executed on the remote server
+        echo "Executing commands on $HOSTNAME"
+        sudo  az acr login --name ACRNOAMAN --username ACRNOAMAN --password BvZYFM64ATh/HjrSJm6mAMk0/qM9PVLvMhss2TeuSM+ACRDF7GJU
+        sudo  docker pull acrnoaman.azurecr.io/abha:"$GH_RUN_NUMBER"-DEV
+		sudo docker run -it -p 80:8080 acrnoaman.azurecr.io/abha:"$GH_RUN_NUMBER"-DEV
 
 
-# Iterate over IP addresses from the test file
-while IFS= read -r IP_ADDRESS; do
-    echo "Processing $IP_ADDRESS"
-    ssh azureuser@$IP_ADDRESS 'az acr login --name $ACR_NAME --username $ACR_USERNAME --password $ACR_PASSWORD; docker pull $ACR_NAME.azurecr.io/$IMAGE_NAME:$GITHUB_RUN_NUMBER-DEV'
-    # Run other commands or operations as needed for each IP address
-    # For example, you can deploy the pulled image to the specified IP address
+EOF
 
-done < "$TEST_FILE"
+    # Check the exit status of the SSH command
+    if [ $? -eq 0 ]; then
+        echo "Successfully executed commands on $ip_address"
+    else
+        echo "Error: Failed to execute commands on $ip_address"
+    fi
 
-# Logout from ACR
-az acr logout
+done < "$ip_file"
