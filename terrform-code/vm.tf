@@ -26,3 +26,10 @@ resource "azurerm_linux_virtual_machine" "linuxvm" {
               command = "echo ${azurerm_public_ip.main-public-ip[count.index].ip_address} >> public_ips.txt"
   }
 }
+
+output "instance_ids" {
+  value = {
+    for ids in range(var.instance_count) :
+    ids => azurerm_virtual_machine.linuxvm[ids].id
+  }
+}
