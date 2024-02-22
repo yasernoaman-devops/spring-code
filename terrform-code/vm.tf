@@ -30,6 +30,6 @@ resource "azurerm_linux_virtual_machine" "linuxvm" {
 output "instance_ids" {
   value = {
     for ids in range(var.instance_count) :
-    ids => azurerm_virtual_machine.linuxvm[ids].id
+    ids => azurerm_linux_virtual_machine.linuxvm[ids].id
   }
 }
