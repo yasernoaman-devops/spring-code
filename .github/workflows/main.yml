@@ -24,19 +24,18 @@ jobs:
               cd terrform-code      
               terraform init 
               terraform apply -auto-approve
-              INSTANCE_NAMES="$(terraform output -raw resource_name)"
-       - name: Set Environment Variables
-         run: |
-           echo "INSTANCE_NAMES=${INSTANCE_NAMES}" >> $GITHUB_ENV	        		   
+              echo "::set-output name=instance_names::$(terraform output -raw instance_names)"
+         id: tfapply         		   
   app-build:
      env:
         job-level: ${{ vars.job_level }}
      needs: infra-build
      runs-on: self-hosted
      steps: 
-       - name: Echo Instance Names
-         run: |
-           echo "Instance Names: $INSTANCE_NAMES"	     
+       - name: Set Instance Names
+         run: echo "INSTANCE_NAMES=${{ needs.infra-build.outputs.instance_names }}" >> $GITHUB_ENV
+       - name: echo instance names 
+         run: echo $INSTANCE_NAMES
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
        - name: build of the application
