@@ -24,24 +24,19 @@ jobs:
               cd terrform-code      
               terraform init 
               terraform apply -auto-approve
-       - name: Save the terraform output
+              INSTANCE_NAMES=$(terraform output -raw resource_name)
+       - name: Set Environment Variables
          run: |
-           echo "resource_name=$(terraform output -raw resource_name)" > terraform_outputs.env
-         working-directory: terrform-code          
-       - name: ssh-ip
-         run: |
-           chmod 775 ssh-ip.sh
-           ./ssh-ip.sh
-       - name: docker container execute
-         run: |
-           chmod 775 docker-run.sh
-           ./docker-run.sh			   
+           echo "INSTANCE_NAMES=${INSTANCE_NAMES}" >> $GITHUB_ENV	        		   
   app-build:
      env:
         job-level: ${{ vars.job_level }}
      needs: infra-build
      runs-on: self-hosted
      steps: 
+       - name: Echo Instance Names
+         run: |
+           echo "Instance Names: $INSTANCE_NAMES"	     
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
        - name: build of the application
