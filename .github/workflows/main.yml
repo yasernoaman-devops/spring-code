@@ -26,6 +26,9 @@ jobs:
               terraform apply -auto-approve
               
          id: tfapply
+       - name: Capture Terraform Outputs
+         id: capture_output
+         run: echo "::set-output name=terraform_outputs::$(terraform output -json)"  
        - name: Upload Terraform State
          uses: actions/upload-artifact@v2
          with:
@@ -37,6 +40,13 @@ jobs:
      needs: infra-build
      runs-on: self-hosted
      steps: 
+       - name: Download Terraform State
+         uses: actions/download-artifact@v2
+         with:
+           name: terraform-state
+       - name: Extract Terraform Outputs
+         id: extract_outputs
+         run: echo "::set-output name=terraform_outputs::$(cat terraform-state/terraform.tfstate | jq '.outputs')"
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
        - name: build of the application
