@@ -27,9 +27,9 @@ resource "azurerm_linux_virtual_machine" "linuxvm" {
   }
 }
 
-output "instance_ids" {
+output "resource_name" {
   value = {
-    for ids in range(var.vm_count) :
-    ids => azurerm_linux_virtual_machine.linuxvm[ids].id
+    for ips in range(var.vm_count) :
+    ips => azurerm_linux_virtual_machine.linuxvm[ips].name
   }
 }
