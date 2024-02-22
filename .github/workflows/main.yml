@@ -27,7 +27,7 @@ jobs:
        - name: Save the terraform output
          run: |
            echo "resource_name=$(terraform output -raw resource_name)" > terraform_outputs.env
-           working-directory: terrform-code              
+         working-directory: terrform-code          
        - name: ssh-ip
          run: |
            chmod 775 ssh-ip.sh
