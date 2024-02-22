@@ -24,13 +24,7 @@ jobs:
               cd terrform-code      
               terraform init 
               terraform apply -auto-approve
-              
-         id: tfapply
-       - name: Capture Terraform Outputs
-         run: |
-                  mkdir  terraform-output
-                  terraform output -json > terraform-output/terraform-output.json
-         continue-on-error: true
+              terraform output -json > terraform-output.json
   app-build:
      env:
         job-level: ${{ vars.job_level }}
@@ -39,7 +33,7 @@ jobs:
      steps: 
        - name: Read Terraform Output
          run: |
-             INSTANCE_NAMES=$(jq -r '.instance_names.value' terraform-output/terraform-output.json)
+             INSTANCE_NAMES=$(jq -r '.instance_names.value' terrform-code/terraform-output.json)
              echo "Instance Names: $INSTANCE_NAMES"
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
