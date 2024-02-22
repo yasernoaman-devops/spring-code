@@ -27,26 +27,20 @@ jobs:
               
          id: tfapply
        - name: Capture Terraform Outputs
-         id: capture_output
-         run: echo "::set-output name=terraform_outputs::$(terraform output -json)"  
-       - name: Upload Terraform State
-         uses: actions/upload-artifact@v2
-         with:
-           name: terraform-state
-           path: terrform-code/terraform.tfstate  
+         run: |
+                  mkdir  terraform-output
+                  terraform output -json > terraform-output/terraform-output.json
+         continue-on-error: true
   app-build:
      env:
         job-level: ${{ vars.job_level }}
      needs: infra-build
      runs-on: self-hosted
      steps: 
-       - name: Download Terraform State
-         uses: actions/download-artifact@v2
-         with:
-           name: terraform-state
-       - name: Extract Terraform Outputs
-         id: extract_outputs
-         run: echo "::set-output name=terraform_outputs::$(cat terraform.tfstate | jq '.outputs')"
+       - name: Read Terraform Output
+         run: |
+             INSTANCE_NAMES=$(jq -r '.instance_names.value' terraform-output.json)
+             echo "Instance Names: $INSTANCE_NAMES"
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
        - name: build of the application
