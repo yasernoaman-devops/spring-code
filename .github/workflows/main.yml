@@ -39,7 +39,7 @@ jobs:
      steps: 
        - name: Read Terraform Output
          run: |
-             INSTANCE_NAMES=$(jq -r '.instance_names.value' terraform-output.json)
+             INSTANCE_NAMES=$(jq -r '.instance_names.value' terraform-output/terraform-output.json)
              echo "Instance Names: $INSTANCE_NAMES"
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
