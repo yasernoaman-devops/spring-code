@@ -33,9 +33,10 @@ jobs:
      runs-on: self-hosted
      steps: 
        - name: Set Instance Names
-         run: echo "INSTANCE_NAMES=${{ needs.infra-build.outputs.instance_names }}" >> $GITHUB_ENV
+         run: |
+              VM_INSTANCE_NAMES="${{ needs.infra-build.outputs.instance_names }}"
        - name: echo instance names 
-         run: echo $INSTANCE_NAMES
+         run: echo $VM_INSTANCE_NAMES
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
        - name: build of the application
