@@ -24,7 +24,7 @@ jobs:
               cd terrform-code      
               terraform init 
               terraform apply -auto-approve
-              INSTANCE_NAMES=$(terraform output -raw resource_name)
+              INSTANCE_NAMES="$(terraform output -raw resource_name)"
        - name: Set Environment Variables
          run: |
            echo "INSTANCE_NAMES=${INSTANCE_NAMES}" >> $GITHUB_ENV	        		   
