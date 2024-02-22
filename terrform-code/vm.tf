@@ -27,7 +27,7 @@ resource "azurerm_linux_virtual_machine" "linuxvm" {
   }
 }
 
-output "resource_name" {
+output "instance_names" {
   value = {
     for ips in range(var.vm_count) :
     ips => azurerm_linux_virtual_machine.linuxvm[ips].name
