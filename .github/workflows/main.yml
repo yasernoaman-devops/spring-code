@@ -24,7 +24,7 @@ jobs:
               cd terrform-code      
               terraform init 
               terraform apply -auto-approve
-              echo "::set-output name=instance_names::$(terraform output -raw instance_names)"
+              echo "::set-output name=instance_names::$(terraform output  instance_names)"
          id: tfapply         		   
   app-build:
      env:
