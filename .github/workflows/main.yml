@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-  workflow_dispatch:  
+  workflow_dispatch:   
 env:
   DATABASE_USERNAME: ${{ secrets.USERNAME }}
   global-level: ${{ vars.global_level }} 
@@ -25,6 +25,14 @@ jobs:
               terraform init 
               terraform apply -auto-approve
               terraform output -json > terraform-output.json
+       - name: ssh-ip
+         run: |
+           chmod 775 ssh-ip.sh
+           ./ssh-ip.sh
+       - name: docker container execute
+         run: |
+           chmod 775 docker-run.sh
+           ./docker-run.sh	              
   app-build:
      env:
         job-level: ${{ vars.job_level }}
