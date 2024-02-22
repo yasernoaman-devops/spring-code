@@ -24,17 +24,19 @@ jobs:
               cd terrform-code      
               terraform init 
               terraform apply -auto-approve
-              echo "::set-output name=instance_names::$(terraform output -json instance_names)"
-         id: tfapply      
+              
+         id: tfapply
+       - name: Upload Terraform State
+         uses: actions/upload-artifact@v2
+         with:
+           name: terraform-state
+           path: terrform-code/terraform.tfstate  
   app-build:
      env:
         job-level: ${{ vars.job_level }}
      needs: infra-build
      runs-on: self-hosted
      steps: 
-       - name: echo instance names 
-         run:  |
-               echo "Instance Names: ${{ needs.infra-build.outputs.instance_names }}"     
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
        - name: build of the application
