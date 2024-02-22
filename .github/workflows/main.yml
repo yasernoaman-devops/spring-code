@@ -46,7 +46,7 @@ jobs:
            name: terraform-state
        - name: Extract Terraform Outputs
          id: extract_outputs
-         run: echo "::set-output name=terraform_outputs::$(cat terraform-state/terraform.tfstate | jq '.outputs')"
+         run: echo "::set-output name=terraform_outputs::$(cat terraform.tfstate | jq '.outputs')"
        - name: list the content of the directory
          run: echo "This is ${{ env.global-level }} , ${{ env.job-level }} and ${{ env.step-level }} variables in a single shell command" 
        - name: build of the application
